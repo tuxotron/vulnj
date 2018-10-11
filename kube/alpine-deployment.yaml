@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vulnj-alpine-deployment
+  labels:
+    app: vulnj-alpine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vulnj-alpine
+  template:
+    metadata:
+      labels:
+        app: vulnj-alpine
+    spec:
+      containers:
+      - name: vulnj-alpine
+        image: tuxotron/vulnj:alpine
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: secret
+          mountPath: "/etc/secret"
+          readOnly: true
+      volumes:
+      - name: secret
+        secret:
+          secretName: mysecret

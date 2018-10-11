@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vulnj-distroless-deployment
+  labels:
+    app: vulnj-distroless
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vulnj-distroless
+  template:
+    metadata:
+      labels:
+        app: vulnj-distroless
+    spec:
+      containers:
+      - name: vulnj-distroless
+        image: tuxotron/vulnj:distroless
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: secret
+          mountPath: "/etc/secret"
+          readOnly: true
+      volumes:
+      - name: secret
+        secret:
+          secretName: mysecret
